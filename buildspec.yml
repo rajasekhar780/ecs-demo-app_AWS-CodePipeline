@@ -8,15 +8,16 @@ env:
 
 phases:
   pre_build:
-    commands:
-      - echo DEBUG_AWS_IDENTITY
-      - aws sts get-caller-identity
-      - echo DEBUG_REGION
-      - echo $AWS_REGION
-      - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_pwd.txt
-      - wc -c /tmp/ecr_pwd.txt
-      - docker version
-      - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
+  commands:
+    - echo DEBUG_AWS_IDENTITY
+    - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+    - echo ACCOUNT_ID=$ACCOUNT_ID
+    - echo DEBUG_REGION
+    - echo $AWS_REGION
+    - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_pwd.txt
+    - wc -c /tmp/ecr_pwd.txt
+    - docker version
+    - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
 
   build:
     commands:
