@@ -8,26 +8,24 @@ env:
 
 phases:
   pre_build:
-  commands:
-    - echo DEBUG_AWS_IDENTITY
-    - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-    - echo ACCOUNT_ID=$ACCOUNT_ID
-    - echo DEBUG_REGION
-    - echo $AWS_REGION
-    - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_pwd.txt
-    - wc -c /tmp/ecr_pwd.txt
-    - docker version
-    - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
+    commands:
+      - echo "Getting AWS account ID"
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - echo "Account ID is $ACCOUNT_ID"
+      - echo "Logging in to Amazon ECR"
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
 
   build:
     commands:
+      - echo "Building Docker image"
       - docker build -t ${ECR_REPO}:${IMAGE_TAG} .
-      - docker tag ${ECR_REPO}:${IMAGE_TAG} ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
 
   post_build:
     commands:
-      - docker push ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
-      - printf '[{"name":"my-app-container","imageUri":"%s"}]' ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG} > imagedefinitions.json
+      - echo "Pushing Docker image"
+      - docker tag ${ECR_REPO}:${IMAGE_TAG} ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
+      - docker push ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
+      - printf '[{"name":"my-app-container","imageUri":"%s"}]' ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG} > imagedefinitions.json
 
 artifacts:
   files:
