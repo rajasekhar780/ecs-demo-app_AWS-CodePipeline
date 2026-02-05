@@ -7,12 +7,23 @@ env:
     IMAGE_TAG: latest
 
 phases:
-  pre_build:
-    commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+ pre_build:
+  commands:
+    - echo "=== DEBUG: AWS identity ==="
+    - aws sts get-caller-identity
+
+    - echo "=== DEBUG: AWS region ==="
+    - echo AWS_REGION=${AWS_REGION}
+
+    - echo "=== DEBUG: ECR login password test ==="
+    - aws ecr get-login-password --region ${AWS_REGION} > /tmp/ecr_pwd.txt
+    - wc -c /tmp/ecr_pwd.txt
+
+    - echo "=== DEBUG: Docker version ==="
+    - docker version
+
+    - echo "=== DEBUG: Docker login ==="
+    - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
   build:
     commands:
