@@ -25,7 +25,7 @@ phases:
       - echo "Pushing Docker image"
       - docker tag ${ECR_REPO}:${IMAGE_TAG} ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
       - docker push ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
-      - printf '[{"name":"my-app-container","imageUri":"%s"}]' ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG} > imagedefinitions.json
+      - printf '[{"name":"app","imageUri":"%s"}]' ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com/${ECR_REPO}:${IMAGE_TAG} > imagedefinitions.json
 
 artifacts:
   files:
