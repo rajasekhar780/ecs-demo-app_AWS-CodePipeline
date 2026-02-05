@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Success | ECS</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
+        .icon { font-size: 50px; color: #2ecc71; margin-bottom: 1rem; }
+        h1 { color: #2c3e50; margin: 0; }
+        p { color: #7f8c8d; line-height: 1.6; }
+        .status-badge { display: inline-block; background: #e8f8f0; color: #2ecc71; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">🚀</div>
+        <h1>Deployment Successful!</h1>
+        <p>Your Docker service has been successfully built via <strong>AWS CodePipeline</strong> and deployed to <strong>AWS ECS</strong>.</p>
+        <div class="status-badge">SERVICE: ACTIVE</div>
+    </div>
+</body>
+</html>
