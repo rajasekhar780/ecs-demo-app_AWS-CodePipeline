@@ -13,10 +13,10 @@ phases:
       - aws sts get-caller-identity
       - echo DEBUG_REGION
       - echo $AWS_REGION
-      - aws ecr get-login-password --region $AWS_REGION > /tmp/ecr_pwd.txt
+      - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_pwd.txt
       - wc -c /tmp/ecr_pwd.txt
       - docker version
-      - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+      - cat /tmp/ecr_pwd.txt | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.ap-south-1.amazonaws.com
 
   build:
     commands:
