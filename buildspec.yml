@@ -10,22 +10,19 @@ phases:
     commands:
       - echo Logging in to Amazon ECR
       - aws ecr get-login-password --region $AWS_REGION |
-        docker login --username AWS --password-stdin \
-        060336321420.dkr.ecr.$AWS_REGION.amazonaws.com
+        docker login --username AWS --password-stdin 060336321420.dkr.ecr.$AWS_REGION.amazonaws.com
       - IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
 
   build:
     commands:
       - echo Build Docker image
       - docker build -t $ECR_REPO:$IMAGE_TAG .
-      - docker tag $ECR_REPO:$IMAGE_TAG \
-        060336321420.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - docker tag $ECR_REPO:$IMAGE_TAG 060336321420.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
 
   post_build:
     commands:
       - echo Push image to ECR
-      - docker push \
-        060336321420.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - docker push 060336321420.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
       - printf '[{"name":"app","imageUri":"%s"}]' \
         060336321420.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG \
         > imagedefinitions.json
